@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Inertia\Response;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class ReportsController extends Controller
 {
