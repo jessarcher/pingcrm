@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Inertia\Response;
+use Illuminate\Http\RedirectResponse;
 use App\Models\Organization;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
@@ -10,7 +12,7 @@ use Inertia\Inertia;
 
 class OrganizationsController extends Controller
 {
-    public function index()
+    public function index(): Response
     {
         return Inertia::render('Organizations/Index', [
             'filters' => Request::all('search', 'trashed'),
@@ -29,12 +31,12 @@ class OrganizationsController extends Controller
         ]);
     }
 
-    public function create()
+    public function create(): Response
     {
         return Inertia::render('Organizations/Create');
     }
 
-    public function store()
+    public function store(): RedirectResponse
     {
         Auth::user()->account->organizations()->create(
             Request::validate([
@@ -52,7 +54,7 @@ class OrganizationsController extends Controller
         return Redirect::route('organizations')->with('success', 'Organization created.');
     }
 
-    public function edit(Organization $organization)
+    public function edit(Organization $organization): Response
     {
         return Inertia::render('Organizations/Edit', [
             'organization' => [
@@ -71,7 +73,7 @@ class OrganizationsController extends Controller
         ]);
     }
 
-    public function update(Organization $organization)
+    public function update(Organization $organization): RedirectResponse
     {
         $organization->update(
             Request::validate([
@@ -89,14 +91,14 @@ class OrganizationsController extends Controller
         return Redirect::back()->with('success', 'Organization updated.');
     }
 
-    public function destroy(Organization $organization)
+    public function destroy(Organization $organization): RedirectResponse
     {
         $organization->delete();
 
         return Redirect::back()->with('success', 'Organization deleted.');
     }
 
-    public function restore(Organization $organization)
+    public function restore(Organization $organization): RedirectResponse
     {
         $organization->restore();
 

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Inertia\Response;
+use Illuminate\Http\RedirectResponse;
 use App\Models\User;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
@@ -13,7 +15,7 @@ use Inertia\Inertia;
 
 class UsersController extends Controller
 {
-    public function index()
+    public function index(): Response
     {
         return Inertia::render('Users/Index', [
             'filters' => Request::all('search', 'role', 'trashed'),
@@ -32,12 +34,12 @@ class UsersController extends Controller
         ]);
     }
 
-    public function create()
+    public function create(): Response
     {
         return Inertia::render('Users/Create');
     }
 
-    public function store()
+    public function store(): RedirectResponse
     {
         Request::validate([
             'first_name' => ['required', 'max:50'],
@@ -60,7 +62,7 @@ class UsersController extends Controller
         return Redirect::route('users')->with('success', 'User created.');
     }
 
-    public function edit(User $user)
+    public function edit(User $user): Response
     {
         return Inertia::render('Users/Edit', [
             'user' => [
@@ -75,7 +77,7 @@ class UsersController extends Controller
         ]);
     }
 
-    public function update(User $user)
+    public function update(User $user): RedirectResponse
     {
         if (App::environment('demo') && $user->isDemoUser()) {
             return Redirect::back()->with('error', 'Updating the demo user is not allowed.');
@@ -103,7 +105,7 @@ class UsersController extends Controller
         return Redirect::back()->with('success', 'User updated.');
     }
 
-    public function destroy(User $user)
+    public function destroy(User $user): RedirectResponse
     {
         if (App::environment('demo') && $user->isDemoUser()) {
             return Redirect::back()->with('error', 'Deleting the demo user is not allowed.');
@@ -114,7 +116,7 @@ class UsersController extends Controller
         return Redirect::back()->with('success', 'User deleted.');
     }
 
-    public function restore(User $user)
+    public function restore(User $user): RedirectResponse
     {
         $user->restore();
 

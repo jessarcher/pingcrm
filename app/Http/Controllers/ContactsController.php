@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Inertia\Response;
+use Illuminate\Http\RedirectResponse;
 use App\Models\Contact;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
@@ -11,7 +13,7 @@ use Inertia\Inertia;
 
 class ContactsController extends Controller
 {
-    public function index()
+    public function index(): Response
     {
         return Inertia::render('Contacts/Index', [
             'filters' => Request::all('search', 'trashed'),
@@ -32,7 +34,7 @@ class ContactsController extends Controller
         ]);
     }
 
-    public function create()
+    public function create(): Response
     {
         return Inertia::render('Contacts/Create', [
             'organizations' => Auth::user()->account
@@ -44,7 +46,7 @@ class ContactsController extends Controller
         ]);
     }
 
-    public function store()
+    public function store(): RedirectResponse
     {
         Auth::user()->account->contacts()->create(
             Request::validate([
@@ -66,7 +68,7 @@ class ContactsController extends Controller
         return Redirect::route('contacts')->with('success', 'Contact created.');
     }
 
-    public function edit(Contact $contact)
+    public function edit(Contact $contact): Response
     {
         return Inertia::render('Contacts/Edit', [
             'contact' => [
@@ -91,7 +93,7 @@ class ContactsController extends Controller
         ]);
     }
 
-    public function update(Contact $contact)
+    public function update(Contact $contact): RedirectResponse
     {
         $contact->update(
             Request::validate([
@@ -114,14 +116,14 @@ class ContactsController extends Controller
         return Redirect::back()->with('success', 'Contact updated.');
     }
 
-    public function destroy(Contact $contact)
+    public function destroy(Contact $contact): RedirectResponse
     {
         $contact->delete();
 
         return Redirect::back()->with('success', 'Contact deleted.');
     }
 
-    public function restore(Contact $contact)
+    public function restore(Contact $contact): RedirectResponse
     {
         $contact->restore();
 
